@@ -21,7 +21,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import r2_score
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.ensemble import BaggingClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn import preprocessing
+from sklearn.preprocessing import StandardScaler # for scaling data
 warnings.filterwarnings('ignore')
 
 
@@ -30,8 +32,8 @@ data = pd.read_csv('fraudTrain.csv')
 
 
 
-data.head()
-data.tail()
+print(data.head())
+
 
 # feature engineering
 
@@ -49,30 +51,30 @@ data['Day'] = data['Time'].dt.day
 data['Month'] = data['Time'].dt.month
 data['Year'] = data['Time'].dt.year
 
-data.head()
-data.tail()
+print(data.head())
 
 # adding hour and minute to the dataset
 data['Hour'] = data['Time'].dt.hour
 data['Minute'] = data['Time'].dt.minute
 
-data.head()
-data.tail()
+print(data.head())
+
 
 # no need for the time column, it has been substituted with day, month, year and time
 data = data.drop(['Time'], axis=1)
 
-data.head()
+print(data.head())
+
 
 #the number of unique value
+print('----------------')
 print(data['is_fraud'].nunique())
-
 print(data['is_fraud'].unique())
 
 
 # data cleansing
 print(pd.value_counts(data['is_fraud']))
-data.shape
+print(data.shape)
 
 #count the number of nulls
 print(data.isnull().sum())
@@ -81,7 +83,7 @@ print(data.isnull().sum())
 data.dropna(inplace = True)
 
 #count the number of nulls
-print(data.isnull().sum())
+print('nulls:', data.isnull().sum())
 
 #Encoding object columns
 label_encoding=preprocessing.LabelEncoder()
@@ -90,7 +92,7 @@ for i in cols:
     data[i]=label_encoding.fit_transform(data[i])
 
 # check if any data is duplicated
-data.duplicated().sum()
+print(data.duplicated().sum())
 
 
 #check outlires
@@ -115,6 +117,36 @@ for i in cols:
 
 x = data.drop(columns=['is_fraud'])
 y = data['is_fraud']
-x_train,x_test,y_train,y_test = model_selection.train_test_split(x,y, test_size=0.2)
+print('Class distribution in y:')
+print(y.value_counts())
+print(data['is_fraud'].nunique())
+
+x_train,x_test,y_train,y_test = model_selection.train_test_split(x,y, test_size=0.1, random_state = 21, stratify=y)
 print(len(x_train),len(y_train),len(x_test),len(y_test))
 
+print('Class distribution in y_train:')
+print(y_train.value_counts())
+print('Class distribution in y_test:')
+print(y_test.value_counts())
+
+#logistic regression model training
+
+#scaling the data
+scaler = StandardScaler()
+x_train_scaled = scaler.fit_transform(x_train)
+x_test_scaled = scaler.transform(x_test)
+
+print('the trainig after scaling shape:', x_train_scaled.shape)
+# training the model
+log_reg = LogisticRegression(random_state = 0).fit(x_train_scaled, y_train)
+prediction = log_reg.predict(x_train_scaled)
+
+#accuracy
+trainAccuracy = log_reg.score(x_train_scaled,y_train)
+testAccuracy = log_reg.score(x_test_scaled,y_test)
+
+print(f'the train score is {log_reg.score(x_train_scaled, y_train)}')
+print(f'the train accuracy is {trainAccuracy}%')
+print('---------------------------------------')
+print(f'the test accuracy is {testAccuracy}%')
+print(f'the test score is {log_reg.score(x_test_scaled, y_test)}')
