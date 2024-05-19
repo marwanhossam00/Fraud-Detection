@@ -1,0 +1,52 @@
+--------------------------------randomforest regressor
+precision: 0.12
+recall: 0.96
+f1_score: 0.22
+the test accuracy is 97.34955975951874%
+the test score is 0.9734955975951874
+train Confusion Matrix:
+[[538936  14638]
+ [    91   2054]]
+
+----------------------randomforestclassifier
+precision: 1.00
+recall: 1.00
+f1_score: 1.00
+the train accuracy is 100.0%
+the train score is 1.0
+the mean squared error is 0.0
+train Confusion Matrix:
+[[5713    0]
+ [   0 5713]]
+---------------------------------------
+precision: 0.12
+recall: 0.94
+f1_score: 0.21
+the test accuracy is 97.27344215331848%
+the mean squared error is 0.027265578466815064
+the test score is 0.9727344215331849
+train Confusion Matrix:
+[[538542  15032]
+ [   120   2025]]
+---------------------------------------
+--------------------------------------------xgBoost
+precision: 0.99
+recall: 0.99
+f1_score: 0.99
+the train accuracy is 99.0285314195694%
+the train score is 0.990285314195694
+the mean squared error is 0.009714685804305968
+train Confusion Matrix:
+ [[5667   46]
+ [  65 5648]]
+---------------------------------------
+precision: 0.13
+recall: 0.96
+f1_score: 0.23
+the test accuracy is 97.55433951331518%
+the mean squared error is 0.024456604866848173
+the test score is 0.9755433951331518
+train Confusion Matrix:
+ [[540078  13496]
+ [    95   2050]]
+---------------------------------------
